@@ -26,3 +26,5 @@ TODO
 `README.md` - readme
 
 `cf_ekscluster.yml` - Cloudformation script to create the EKS cluster in a newly created VPC
+
+`Jenkinsfile` - Jenkins build instructions
