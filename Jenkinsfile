@@ -3,6 +3,9 @@ pipeline {
      stages {
         stage('Linting') {
             steps {
+                sh '''
+                    hadolint Dockerfile
+                '''
             }
         }
         stage('Build Docker image') {
