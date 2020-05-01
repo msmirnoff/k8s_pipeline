@@ -1,10 +1,10 @@
-stage(‘Linting') {
+stage('Linting') {
 
 }
 stage('Build image') {
 
 }
-stage(Push image') {
+stage('Push image') {
 
 }
 stage('set current kubectl context') {
