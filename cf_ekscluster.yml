@@ -7,6 +7,11 @@ Parameters:
     EnvironmentName:
         Description: An environment name that will be prefixed to resource names
         Type: String
+        Default: k8s-pipeline
+
+    ClusterName:
+        Description: Name for the EKS cluster to be used in kubeconfig
+        Type: String
         Default: eksClusterDev
 
     VpcCIDR:
@@ -211,6 +216,7 @@ Resources:
                     - !Ref PublicSubnet1
                     - !Ref PublicSubnet2
             RoleArn: !GetAtt eksClusterRole.Arn
+            Name: !Ref ClusterName
 
     eksClusterRole:
         Type: AWS::IAM::Role
