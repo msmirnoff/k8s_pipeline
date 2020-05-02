@@ -37,7 +37,7 @@ pipeline {
         }
         stage('set current kubectl context') {
             steps {
-                withCredentials([
+                withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'aws-jenkins',
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
