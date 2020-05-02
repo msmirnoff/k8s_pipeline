@@ -37,14 +37,17 @@ pipeline {
         }
         stage('set current kubectl context') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'aws-jenkins',
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'],
-                    string(credentialsId: 'REGION_NAME', variable: 'REGION_NAME'),
-                    string(credentialsId: 'CLUSTER_NAME', variable: 'CLUSTER_NAME')]
-                )
+                    [$class: 'StringBinding',
+                    credentialsId: 'REGION_NAME',
+                    variable: 'REGION_NAME'],
+                    [$class: 'StringBinding',
+                    credentialsId: 'CLUSTER_NAME',
+                    variable: 'CLUSTER_NAME']])
                 {
                     sh '''
                         aws eks --region "$REGION_NAME" update-kubeconfig --name "$CLUSTER_NAME"
