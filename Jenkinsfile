@@ -23,9 +23,16 @@ pipeline {
         }
         stage('Push image to DockerHub') {
             steps {
-                sh '''
-                    echo TODO
-                '''
+                withCredentials(
+                    [usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'),
+                    string(credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME')]
+                )
+                {
+                    sh '''
+                        docker login -u "$DOCKER_USERNAME" -P "$DOCKER_PASSWORD"
+                        docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID"
+                    '''
+                }
             }
         }
         stage('set current kubectl context') {
