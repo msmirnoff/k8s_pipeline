@@ -1,6 +1,6 @@
 pipeline {
-     agent any
-     stages {
+    agent any
+    stages {
 
         environment {
             IMAGE_NAME   = credentials('IMAGE_NAME')
@@ -43,5 +43,5 @@ pipeline {
                 '''
             }
         }
-     }
+    }
 }
