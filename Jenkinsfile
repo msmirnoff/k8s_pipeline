@@ -20,6 +20,16 @@ pipeline {
                 }
             }
         }
+        stage('Scan Docker image') {
+            steps{
+                withCredentials([
+                    [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
+                    [$class: 'StringBinding', credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
+                {
+                    aquaMicroscanner imageName: "$DOCKER_USERNAME"/"$IMAGE_NAME", notCompliesCmd: 'exit 4', onDisallowed: 'fail', outputFormat: 'html'
+                }
+            }
+        }
         stage('Push image to DockerHub') {
             steps {
                 withCredentials([
