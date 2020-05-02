@@ -29,7 +29,7 @@ pipeline {
                 )
                 {
                     sh '''
-                        docker login -u "$DOCKER_USERNAME" -P "$DOCKER_PASSWORD"
+                        docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
                         docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID"
                     '''
                 }
