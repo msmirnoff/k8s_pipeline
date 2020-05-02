@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        IMAGE_NAME   = credentials('IMAGE_NAME')
-    }
     stages {
         stage('Linting') {
             steps {
