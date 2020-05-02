@@ -12,7 +12,7 @@ pipeline {
             steps {
                 withCredentials([
                     [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
-                    [$class: 'StringBinding',credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
+                    [$class: 'StringBinding', credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
                 {
                     sh '''
                         docker build -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID" .
@@ -24,8 +24,7 @@ pipeline {
             steps {
                 withCredentials([
                     [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
-                    [$class: 'StringBinding',credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
-                )
+                    [$class: 'StringBinding', credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
                 {
                     sh '''
                         docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
