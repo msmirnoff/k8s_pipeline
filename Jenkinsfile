@@ -10,10 +10,9 @@ pipeline {
         }
         stage('Build Docker image') {
             steps {
-                withCredentials(
-                    [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
-                    [$class: 'StringBinding',credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME')]]
-                )
+                withCredentials([
+                    [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
+                    [$class: 'StringBinding',credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
                 {
                     sh '''
                         docker build -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID" .
