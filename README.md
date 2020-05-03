@@ -34,7 +34,15 @@ After running, revoke unneeded AWS privileges from Jenkins (generally anything e
 
 Primary Jenkins pipeline is defined in Jenkinsfile.
 
+Blue/Green deployment requires 2 running Prod environments, one of which gets clients routed to it, we deploy to the other one, and we want to cut over once we're ok with the deployment.
 
+Once code is changed, `loadbalancer.yaml` needs to have the app name set to the target environment, code is pushed and pipeline triggered.
+
+That does some sanity checks and linting, builds the image, checks for vulnerabilities, and pushes to DockerHub.
+
+Container is then launched in EKS.
+
+User is prompted to confirm switching the load balancer.
 
 # Repository file information
 
@@ -47,3 +55,9 @@ Primary Jenkins pipeline is defined in Jenkinsfile.
 `eks_creation.yml` - Cloudformation script to create the EKS cluster in a newly created VPC
 
 `Jenkinsfile` - Jenkins build instructions
+
+`replication.yaml` - K8S replication controller config, to launch the container
+
+`loadbalancer.yaml` - K8S service config, to make the app pods accessible at a public URL
+
+`html` & `index.html - sample app, thanks to the cat API
