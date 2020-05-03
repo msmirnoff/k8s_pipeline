@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sh '''
                     hadolint Dockerfile
-                    sh "tidy -q -e html/*.html"
+                    tidy -q -e html/*.html
                 '''
             }
         }
