@@ -43,6 +43,18 @@ pipeline {
                 }
             }
         }
+        stage('Remove Unused docker image') {
+            steps {
+                withCredentials([
+                    [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
+                    [$class: 'StringBinding', credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
+                {
+                    sh '''
+                        docker rmi "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID"
+                    '''
+                }
+            }
+        }
         stage('set current kubectl context') {
             steps {
                 withCredentials([
@@ -61,18 +73,6 @@ pipeline {
                 sh '''
                     echo TODO
                 '''
-            }
-        }
-        stage('Remove Unused docker image') {
-            steps {
-                withCredentials([
-                    [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
-                    [$class: 'StringBinding', credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
-                {
-                    sh '''
-                        docker rmi "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID"
-                    '''
-                }
             }
         }
     }
