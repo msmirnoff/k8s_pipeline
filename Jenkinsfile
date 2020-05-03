@@ -16,10 +16,8 @@ pipeline {
         }
         stage('Linting') {
             steps {
-                sh '''
-                    hadolint Dockerfile
-                    tidy -q -e html/*.html
-                '''
+                sh 'hadolint Dockerfile'
+                sh 'tidy -q -e html/*.html'
             }
         }
         stage('Build Docker image') {
@@ -50,10 +48,8 @@ pipeline {
                     [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
                     [$class: 'StringBinding', credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
                 {
-                    sh '''
-                        docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
-                        docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID"
-                    '''
+                    sh ' docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD" '
+                    sh ' docker push "$DOCKER_USERNAME"/"$IMAGE_NAME":"$BUILD_ID" '
                 }
             }
         }
