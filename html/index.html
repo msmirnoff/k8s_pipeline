@@ -1,9 +1,15 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
 <html>
 <!-- Random cats on page load, courtesy of The Cat API  -->
- <head>
+
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+
+  <title>Random Cat</title>
   <script type="text/javascript">
-    function ajax_get(url, callback) {
+  function ajax_get(url, callback) {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -33,14 +39,15 @@
         document.getElementById('cat').click();
     }
   </script>
- </head>
+</head>
 
- <body align="center">
-    <h1 style="color:blue;">Random Cat</h1>
-    <div style="margin-bottom: 10px;">
-        <input id="cat" value="This cat, I like it. Another!" type="button" />
-    </div>
-    <div id="image"></div>
- </body>
+<body style="text-align:center;">
+  <h1 style="color:blue;">Random Cat</h1>
+
+  <div style="margin-bottom: 10px;">
+    <input id="cat" value="This cat, I like it. Another!" type="button">
+  </div>
+
+  <div id="image"></div>
+</body>
 </html>
-
