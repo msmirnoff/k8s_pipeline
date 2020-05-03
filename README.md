@@ -5,19 +5,36 @@ Utilises Docker, Jenkins and kubernetes via AWS EKS.
 
 # Requirements
 
-* DockerHub and AWS accounts
-* EKS cluster set up, e.g. using `cf_ekscluster.yml` with the _right user_ (see https://docs.aws.amazon.com/eks/latest/userguide/troubleshooting.html#unauthorized). It appears that unless you already know Kubernetes well enough to do everything yourself, AWS assumes that user creating the cluster will be the only user initially accessing it - which makes _using an admin account to create a cluster that other users can access_ a use case that doesn't work out of the box. Perhaps create it as a new user with the relevant IAM and Cloudformation privileges and remove those privileges after creation, then use that user to access EKS. Someone familiar with K8S and EKS probably knows a better way.
+* AWS account and a user with sufficient privileges
+* A Docker registry account. DockerHub is assumed.
 * Jenkins server with:
     * repository integration
-    * AWS pipeline
+    * AWS pipeline plugin
+    * BlueOcean plugin
+    * aqua Microscanner plugin
     * docker installed
     * Jenkins able to run docker commands (e.g. via `usermod -a -G docker jenkins` but note that this will mean that Jenkins might as well run as root. There probably is a more secure way.)
     * Installed eksctl
     * installed kubectl
+    * AWS credentials set up
+    * Other credentials (container registry, aqua API Key, etc) set up
+    * Environment variables set up as needed (docker image parameters, region, etc) this is mostly for convenience and can be hardcoded instead
+    * Sufficient IAM privileges to create the environment (these privileges can be removed after initial creation)
+    * Sufficient privileges to deploy to EKS
 
 # Usage
 
-TODO
+## Initial set up
+
+Set up a custom pipeline in Jenkins as a Pipeline script from SCM, and set it to be the `initialSetupPipeline.groovy` script.
+
+After running, revoke unneeded AWS privileges from Jenkins (generally anything except EKS access).
+
+## Build and Deploy
+
+Primary Jenkins pipeline is defined in Jenkinsfile.
+
+
 
 # Repository file information
 
@@ -25,6 +42,8 @@ TODO
 
 `README.md` - readme
 
-`cf_ekscluster.yml` - Cloudformation script to create the EKS cluster in a newly created VPC
+`initialSetupPipeline.groovy` - one-shot Jenkins pipeline to create the EKS cluster and supporting resources
+
+`eks_creation.yml` - Cloudformation script to create the EKS cluster in a newly created VPC
 
 `Jenkinsfile` - Jenkins build instructions
