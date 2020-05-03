@@ -5,6 +5,7 @@ pipeline {
             steps {
                 sh '''
                     hadolint Dockerfile
+                    sh "tidy -q -e html/*.html"
                 '''
             }
         }
