@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        $BLUEGREEN = sh (returnStdout: true, script: "grep app loadbalancer.yaml | cut -d':' -f2").replace(' ', '');
+        BLUEGREEN = sh (returnStdout: true, script: "grep app loadbalancer.yaml | cut -d':' -f2").replace(' ', '');
     }
     stages {
         stage('Preflight checks') {
