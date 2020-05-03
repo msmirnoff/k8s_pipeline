@@ -60,4 +60,4 @@ User is prompted to confirm switching the load balancer.
 
 `loadbalancer.yaml` - K8S service config, to make the app pods accessible at a public URL
 
-`html` & `index.html - sample app, thanks to the cat API
+`html` & `index.html` - sample app, thanks to the cat API
