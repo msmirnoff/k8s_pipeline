@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bluegreenlb
+spec:
+  type: LoadBalancer
+  selector:
+    app: SET_DEPLOY_TARGET
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

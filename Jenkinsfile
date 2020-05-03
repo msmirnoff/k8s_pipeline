@@ -1,6 +1,19 @@
 pipeline {
     agent any
+    environment {
+        $BLUEGREEN = sh (returnStdout: true, script: "grep app loadbalancer.yaml | awk '{print $2}'").trim()
+    }
     stages {
+        stage('Preflight checks') {
+            steps {
+                sh '''
+                    if [[ "$BLUEGREEN" != "blue" && "$BLUEGREEN" != "green" ]]; then
+                        echo "Undefined deployment target"
+                        exit 1
+                    fi
+                '''
+            }
+        }
         stage('Linting') {
             steps {
                 sh '''
@@ -71,9 +84,31 @@ pipeline {
         }
         stage('Deploy container') {
             steps {
-                sh '''
-                    echo TODO
-                '''
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'],
+                    [$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'],
+                    [$class: 'StringBinding', credentialsId: 'IMAGE_NAME', variable: 'IMAGE_NAME']])
+                {
+                    sh '''
+                        envsubst < replication.yaml | kubectl apply -f -
+                    '''
+                }
+            }
+        }
+        stage('Check that it is ok to make this the active environment') {
+            steps {
+                input "Switch to this environment?"
+            }
+        }
+        stage('Set deployed environment as active') {
+            steps {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
+                {
+                    sh '''
+                        kubectl apply -f loadbalancer.yaml
+                    '''
+                }
             }
         }
     }
